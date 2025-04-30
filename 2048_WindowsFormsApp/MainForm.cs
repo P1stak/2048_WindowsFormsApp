@@ -12,11 +12,13 @@ namespace _2048_WindowsFormsApp
 {
     public partial class MainForm : Form
     {
-        private const int mapSize = 10; //константа размерности поля
+        private const int mapSize = 4; //константа размерности поля
         private Label[,] _labelsMap; //матрица поля
         private static Random _random = new Random();
         private int _score = 0;
-        private RulesWindow _rulesWindow = new RulesWindow();
+        private int _bestScore = 0;
+        private RulesWindow _rulesWindow;
+        private ResultsWindow _resultsUsers;
         public MainForm()
         {
             InitializeComponent();
@@ -27,6 +29,25 @@ namespace _2048_WindowsFormsApp
             InitMap(); //создание 16 лейблов на форме при старте игры
             GenerateNumber();
             ShowScore();
+            CalcBestScore();
+        }
+        private void CalcBestScore()
+        {
+            var users = UsersManager.GetAll();
+
+            if (users.Count == 0)
+            {
+                return;
+            }
+            _bestScore = users[0].Score;
+            foreach (var user in users)
+            {
+                if (user.Score > _bestScore)
+                {
+                    _bestScore = user.Score;
+                }
+            }
+            ShowBestScore();
         }
         private void ShowScore()
         {
@@ -36,7 +57,14 @@ namespace _2048_WindowsFormsApp
         {
             _rulesWindow.Show();
         }
-
+        private void ShowBestScore()
+        {
+            if (_score > _bestScore)
+            {
+                _bestScore = _score;
+            }
+            bestScoreL.Text = _bestScore.ToString();
+        }
         private void InitMap()
         {
             _labelsMap = new Label[mapSize,mapSize]; //создали поле 4х4
@@ -367,6 +395,7 @@ namespace _2048_WindowsFormsApp
             // после каждого нажатия
             GenerateNumber(); //генерим новое число на поле лейблов
             ShowScore(); // показываем результат
+            ShowBestScore(); // показываем топ результат
         }
 
         private void menu_button_Restart_Click(object sender, EventArgs e) => Application.Restart();
@@ -379,6 +408,12 @@ namespace _2048_WindowsFormsApp
             {
                 Application.Exit();
             }
+        }
+
+        private void menu_button_Results_Click(object sender, EventArgs e)
+        {
+            _resultsUsers.ShowResults();
+
         }
     }
 }
