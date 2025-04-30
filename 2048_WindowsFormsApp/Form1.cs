@@ -12,7 +12,7 @@ namespace _2048_WindowsFormsApp
 {
     public partial class MainForm : Form
     {
-        private const int mapSize = 4; //константа размерности поля
+        private const int mapSize = 10; //константа размерности поля
         private Label[,] _labelsMap; //матрица поля
         private static Random _random = new Random();
         private int _score = 0;
@@ -63,11 +63,26 @@ namespace _2048_WindowsFormsApp
                 var indexRow = randomNumberLabel / mapSize;
                 var indexColum = randomNumberLabel % mapSize;
 
+
+
                 //в рандомном месте на поле генерируем двойку (либо 4)
                 if (_labelsMap[indexRow, indexColum].Text == string.Empty)
                 {
-                    _labelsMap[indexRow, indexColum].Text = "2";
-                    break;
+                    var procentTwo = _random.Next(0, 100);
+                    if (procentTwo < 75)
+                    {
+                        _labelsMap[indexRow, indexColum].Text = "2";
+                        break;
+                    }
+                }
+                if (_labelsMap[indexRow, indexColum].Text == string.Empty)
+                {
+                    var procentFour = _random.Next(0, 100);
+                    if (procentFour < 25)
+                    {
+                        _labelsMap[indexRow, indexColum].Text = "4";
+                        break;
+                    }
                 }
             }
         }
