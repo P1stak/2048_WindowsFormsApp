@@ -47,7 +47,6 @@
             this.resultsGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.resultsGridView1.Size = new System.Drawing.Size(302, 450);
             this.resultsGridView1.TabIndex = 0;
-            this.resultsGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.resultsGridView1_CellContentClick);
             // 
             // Column1
             // 

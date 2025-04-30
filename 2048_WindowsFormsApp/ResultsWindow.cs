@@ -13,24 +13,20 @@ namespace _2048_WindowsFormsApp
     public partial class ResultsWindow : Form
     {
         private List<User> _results = new List<User>();
-        private ResultsWindow()
+        public ResultsWindow()
         {
             InitializeComponent();
             ShowResults();
         }
         public void ShowResults()
         {
+            resultsGridView1.Rows.Clear(); // Очищаем старые данные
             var users = UsersManager.GetAll();
             foreach (var item in users)
             {
-                resultsGridView1.Rows.Add(item.Name, item.Score);
+                resultsGridView1.Rows.Add(item.Name, item.Score); // Добавляем новые
             }
 
-        }
-
-        private void resultsGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            ShowResults();
         }
     }
 }

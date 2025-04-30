@@ -5,25 +5,15 @@ namespace _2048_WindowsFormsApp
 {
     public class FileProvider
     {
-        public static void Append(string fileName, string value)
-        { 
-            var writer = new StreamWriter(fileName, true, Encoding.UTF8);
-            writer.Write(value);
-            writer.Close();
-        }
-        public static bool Exist(string fileName)
-        { 
-            return File.Exists(fileName);
-        }
-        public static void Clear(string fileName)
-        {
-            File.WriteAllText(fileName, string.Empty);
-        }
         public static void Replace(string fileName, string value)
         {
             var writer = new StreamWriter(fileName, false, Encoding.UTF8);
-            writer.Write(value);
+            writer.WriteLine(value);
             writer.Close();
+        }
+        public static bool Exist(string path)
+        { 
+            return File.Exists(path);
         }
         public static string GetValue(string fileName)
         {
