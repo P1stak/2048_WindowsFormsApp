@@ -16,6 +16,7 @@ namespace _2048_WindowsFormsApp
         private Label[,] _labelsMap; //матрица поля
         private static Random _random = new Random();
         private int _score = 0;
+        private RulesWindow _rulesWindow = new RulesWindow();
         public MainForm()
         {
             InitializeComponent();
@@ -30,6 +31,10 @@ namespace _2048_WindowsFormsApp
         private void ShowScore()
         {
             scoreLabel.Text = _score.ToString();
+        }
+        private void ShowRules()
+        {
+            _rulesWindow.Show();
         }
 
         private void InitMap()
@@ -347,6 +352,18 @@ namespace _2048_WindowsFormsApp
             // после каждого нажатия
             GenerateNumber(); //генерим новое число на поле лейблов
             ShowScore(); // показываем результат
+        }
+
+        private void menu_button_Restart_Click(object sender, EventArgs e) => Application.Restart();
+
+        private void menu_button_Rules_Click(object sender, EventArgs e) => ShowRules();
+
+        private void menu_button_Exit_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Вы уверены, что хотите выйти?", "Предупреждение", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                Application.Exit();
+            }
         }
     }
 }
