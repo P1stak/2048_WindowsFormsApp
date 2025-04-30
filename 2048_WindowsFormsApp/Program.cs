@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace _2048_WindowsFormsApp
 {
-    internal static class Program
+    public static class Program
     {
         /// <summary>
         /// The main entry point for the application.
@@ -16,7 +16,16 @@ namespace _2048_WindowsFormsApp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+
+
+            var loginForm = new Login();
+            if (loginForm.ShowDialog() == DialogResult.OK)
+            {
+                var mainForm = new MainForm();
+                mainForm.CurrentPlayerName = loginForm.PlayerName; // Передаём имя в MainForm
+                Application.Run(mainForm);
+            }
+
         }
     }
 }

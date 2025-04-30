@@ -15,15 +15,39 @@ namespace _2048_WindowsFormsApp
         private const int mapSize = 4; //константа размерности поля
         private Label[,] _labelsMap; //матрица поля
         private static Random _random = new Random();
+
         private int _score = 0;
         private int _bestScore = 0;
-        private RulesWindow _rulesWindow;
-        private ResultsWindow _resultsUsers;
+
+        private RulesWindow _rulesWindow = new RulesWindow();
+        private ResultsWindow _resultsUsers = new ResultsWindow();
+
+        public string CurrentPlayerName { get; set; } // Имя текущего игрока
+
         public MainForm()
         {
             InitializeComponent();
+            this.FormClosing += MainForm_FormClosing;
         }
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // При закрытии формы сохраняем текущего игрока (если он есть)
+            if (!string.IsNullOrEmpty(CurrentPlayerName)) // CurrentPlayerName - поле, где хранится имя игрока
+            {
+                UsersManager.Add(new User(CurrentPlayerName, _score));
+            }
+        }
+        private void UpdateScore(int points)
+        {
+            _score += points;
+            scoreLabel.Text = _score.ToString();
 
+            // Если есть игрок, сохраняем его результат
+            if (!string.IsNullOrEmpty(CurrentPlayerName))
+            {
+                UsersManager.Add(new User(CurrentPlayerName, _score));
+            }
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             InitMap(); //создание 16 лейблов на форме при старте игры
@@ -55,7 +79,11 @@ namespace _2048_WindowsFormsApp
         }
         private void ShowRules()
         {
-            _rulesWindow.Show();
+            if (_rulesWindow == null || _rulesWindow.IsDisposed) // Если окно закрыто или не создано
+            {
+                _rulesWindow = new RulesWindow(); // Создаём заново
+            }
+            _rulesWindow.Show(); // Показываем
         }
         private void ShowBestScore()
         {
@@ -63,7 +91,7 @@ namespace _2048_WindowsFormsApp
             {
                 _bestScore = _score;
             }
-            bestScoreL.Text = _bestScore.ToString();
+            BestScoreLabel.Text = _bestScore.ToString();
         }
         private void InitMap()
         {
@@ -81,38 +109,69 @@ namespace _2048_WindowsFormsApp
         }
         private void GenerateNumber()
         {
-            // условно, в этом методе мы бесконечно ищем ячейку в которой ничего не написано и добавляем туда двойку.
-            // как только добавили - ячейка уже не подходит под требования условия
+            // 1. Собираем все пустые ячейки
+            var emptyCells = new List<(int row, int col)>();
 
-
-            while (true) // while тут плохо, а пока генерируем до бесконечности
+            for (int i = 0; i < mapSize; i++)
             {
-                var randomNumberLabel = _random.Next(mapSize * mapSize); //от нуля до 16 не включая 16
-                var indexRow = randomNumberLabel / mapSize;
-                var indexColum = randomNumberLabel % mapSize;
-
-
-
-                //в рандомном месте на поле генерируем двойку (либо 4)
-                if (_labelsMap[indexRow, indexColum].Text == string.Empty)
+                for (int j = 0; j < mapSize; j++)
                 {
-                    var procentTwo = _random.Next(0, 100);
-                    if (procentTwo < 75)
+                    if (_labelsMap[i, j].Text == string.Empty)
                     {
-                        _labelsMap[indexRow, indexColum].Text = "2";
-                        break;
-                    }
-                }
-                if (_labelsMap[indexRow, indexColum].Text == string.Empty)
-                {
-                    var procentFour = _random.Next(0, 100);
-                    if (procentFour < 25)
-                    {
-                        _labelsMap[indexRow, indexColum].Text = "4";
-                        break;
+                        emptyCells.Add((i, j));
                     }
                 }
             }
+
+            // 2. Если нет пустых клеток — проверяем Game Over
+            if (emptyCells.Count == 0)
+            {
+                if (IsGameOver())
+                {
+                    MessageBox.Show($"Игра окончена! Ваш счёт: {_score}", "Конец игры", MessageBoxButtons.OK);
+                    // Можно добавить кнопку "Новая игра"
+                }
+                return; // Выходим, если нет места
+            }
+
+            // 3. Выбираем случайную пустую клетку
+            var randomCell = emptyCells[_random.Next(emptyCells.Count)];
+            int row = randomCell.row;
+            int col = randomCell.col;
+
+            // 4. Генерируем 2 (75%) или 4 (25%)
+            int newValue = _random.Next(100) < 75 ? 2 : 4;
+            _labelsMap[row, col].Text = newValue.ToString();
+        }
+        private bool IsGameOver()
+        {
+            // 1. Проверяем, есть ли пустые клетки
+            for (int i = 0; i < mapSize; i++)
+            {
+                for (int j = 0; j < mapSize; j++)
+                {
+                    if (_labelsMap[i, j].Text == string.Empty)
+                        return false; // Есть пустые клетки — игра продолжается
+                }
+            }
+
+            // 2. Проверяем, есть ли возможные слияния
+            for (int i = 0; i < mapSize; i++)
+            {
+                for (int j = 0; j < mapSize; j++)
+                {
+                    int currentValue = int.Parse(_labelsMap[i, j].Text);
+
+                    // Проверяем соседей (вправо и вниз, чтобы не дублировать проверки)
+                    if (j < mapSize - 1 && currentValue == int.Parse(_labelsMap[i, j + 1].Text))
+                        return false; // Можно двигать вправо
+
+                    if (i < mapSize - 1 && currentValue == int.Parse(_labelsMap[i + 1, j].Text))
+                        return false; // Можно двигать вниз
+                }
+            }
+
+            return true; // Нет ходов — игра окончена
         }
 
         private Label CreateLabel(int indexRow, int indexColum) // параметры для того, чтобы сместить новый лейбл от предыдущего и его нумерация
@@ -392,6 +451,11 @@ namespace _2048_WindowsFormsApp
                 }
             }
 
+            if (!string.IsNullOrEmpty(CurrentPlayerName))
+            {
+                UsersManager.Add(new User(CurrentPlayerName, _score));
+            }
+
             // после каждого нажатия
             GenerateNumber(); //генерим новое число на поле лейблов
             ShowScore(); // показываем результат
@@ -412,8 +476,12 @@ namespace _2048_WindowsFormsApp
 
         private void menu_button_Results_Click(object sender, EventArgs e)
         {
-            _resultsUsers.ShowResults();
-
+            if (_resultsUsers == null || _resultsUsers.IsDisposed) // Если окно закрыто или не создано
+            {
+                _resultsUsers = new ResultsWindow(); // Создаём заново
+            }
+            _resultsUsers.ShowResults(); // Обновляем данные
+            _resultsUsers.Show(); // Показываем
         }
     }
 }
