@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace _2048_WindowsFormsApp
 {
     public partial class MainForm : Form
     {
-        private const int mapSize = 4; //константа размерности поля
+        private  int mapSize = 4; //константа размерности поля
         private Label[,] _labelsMap; //матрица поля
         private static Random _random = new Random();
 
@@ -27,7 +22,8 @@ namespace _2048_WindowsFormsApp
         public MainForm()
         {
             InitializeComponent();
-            this.FormClosing += MainForm_FormClosing;
+            FormClosing += MainForm_FormClosing;
+            KeyPreview = true; // чтобы форма ловила клавиши после смены размерности поля
         }
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -54,6 +50,9 @@ namespace _2048_WindowsFormsApp
             GenerateNumber();
             ShowScore();
             CalcBestScore();
+            label_field_size.Visible = false;
+            textBox_field_size.Visible = false;
+            button_field_size.Visible = false;
         }
         private void CalcBestScore()
         {
@@ -95,17 +94,46 @@ namespace _2048_WindowsFormsApp
         }
         private void InitMap()
         {
-            _labelsMap = new Label[mapSize,mapSize]; //создали поле 4х4
-
-            for (int i = 0; i < mapSize; i++) //строчки
+            // Удалить старые лейблы
+            if (_labelsMap != null)
             {
-                for (int j = 0; j < mapSize; j++) //столбцы
+                foreach (var label in _labelsMap)
                 {
-                    var lewlabel = CreateLabel(i,j);
-                    Controls.Add(lewlabel);
-                    _labelsMap[i,j] = lewlabel;
+                    Controls.Remove(label);
+                    label.Dispose();
                 }
             }
+
+            // Очистить текущий счёт
+            _score = 0;
+            ShowScore();
+
+            // Создать новый массив нужного размера
+            _labelsMap = new Label[mapSize, mapSize];
+
+            // Создать новые лейблы
+            for (int i = 0; i < mapSize; i++)
+            {
+                for (int j = 0; j < mapSize; j++)
+                {
+                    var newLabel = CreateLabel(i, j);
+                    Controls.Add(newLabel);
+                    _labelsMap[i, j] = newLabel;
+                }
+            }
+
+            // Обновить лучший счёт
+            CalcBestScore();
+
+            // 7. Изменяем размер формы под поле
+            int baseLeftOffset = 20; // запас
+            int baseTopOffset = 100;
+            int cellSizeWithMargin = 76;
+
+            int totalFieldWidth = mapSize * cellSizeWithMargin + baseLeftOffset;
+            int totalFieldHeight = mapSize * cellSizeWithMargin + baseTopOffset;
+
+            ClientSize = new Size(totalFieldWidth, totalFieldHeight);
         }
         private void GenerateNumber()
         {
@@ -214,7 +242,7 @@ namespace _2048_WindowsFormsApp
                                     if (_labelsMap[i, j].Text == _labelsMap[i, k].Text) // и если эта ячейка по значению такая же как правая
                                     {
                                         var number = int.Parse(_labelsMap[i, j].Text); // берем то что там написано
-                                        _score += number * 2; // плюсуем в результат
+                                        UpdateScore(number * 2); // плюсуем в результат
                                         _labelsMap[i,j].Text = (number * 2).ToString(); // и мы их складываем
 
                                         //а ячейка _labelsMap[i, k].Text (которую )обнуляем
@@ -279,7 +307,7 @@ namespace _2048_WindowsFormsApp
                                     if (_labelsMap[i, j].Text == _labelsMap[i, k].Text) // и если эта ячейка по значению такая же как правая
                                     {
                                         var number = int.Parse(_labelsMap[i, j].Text); // берем то что там написано
-                                        _score += number * 2;
+                                        UpdateScore(number * 2);
                                         _labelsMap[i, j].Text = (number * 2).ToString(); // и мы их складываем
 
                                         //а ячейка _labelsMap[i, k].Text (которую )обнуляем
@@ -344,7 +372,7 @@ namespace _2048_WindowsFormsApp
                                     if (_labelsMap[i, j].Text == _labelsMap[k, j].Text) // и если эта ячейка по значению такая же как правая
                                     {
                                         var number = int.Parse(_labelsMap[i, j].Text); // берем то что там написано
-                                        _score += number * 2;
+                                        UpdateScore(number * 2);
                                         _labelsMap[i, j].Text = (number * 2).ToString(); // и мы их складываем
 
                                         //а ячейка _labelsMap[i, k].Text (которую )обнуляем
@@ -409,7 +437,7 @@ namespace _2048_WindowsFormsApp
                                     if (_labelsMap[i, j].Text == _labelsMap[k, j].Text) // и если эта ячейка по значению такая же как правая
                                     {
                                         var number = int.Parse(_labelsMap[i, j].Text); // берем то что там написано
-                                        _score += number * 2;
+                                        UpdateScore(number * 2);
                                         _labelsMap[i, j].Text = (number * 2).ToString(); // и мы их складываем
 
                                         //а ячейка _labelsMap[i, k].Text (которую )обнуляем
@@ -482,6 +510,48 @@ namespace _2048_WindowsFormsApp
             }
             _resultsUsers.ShowResults(); // Обновляем данные
             _resultsUsers.Show(); // Показываем
+        }
+
+        private void menu_button_Field_Size_Click(object sender, EventArgs e)
+        {
+            Score.Visible = false;
+            scoreLabel.Visible = false;
+            bestScoreL.Visible = false;
+            BestScoreLabel.Visible = false;
+
+            label_field_size.Visible = true;
+            textBox_field_size.Visible = true;
+            button_field_size.Visible = true;
+        }
+
+        private void button_field_size_Click(object sender, EventArgs e)
+        {
+            string input = textBox_field_size.Text;
+
+            if (int.TryParse(input, out int newSize))
+            {
+                if (newSize >= 2 && newSize <= 10)
+                {
+                    mapSize = newSize;
+                    MessageBox.Show($"Размер поля установлен: {mapSize}x{mapSize}");
+                    InitMap();
+                    GenerateNumber();
+                    Focus();
+                }
+                else MessageBox.Show("Введите число от 2 до 10", "Недопустимое значение");
+            }
+            else
+            {
+                MessageBox.Show("Пожалуйста, введите число", "Ошибка ввода");
+            }
+            label_field_size.Visible = false;
+            textBox_field_size.Visible = false;
+            button_field_size.Visible = false;
+
+            Score.Visible = true;
+            scoreLabel.Visible = true;
+            bestScoreL.Visible = true;
+            BestScoreLabel.Visible = true;
         }
     }
 }
