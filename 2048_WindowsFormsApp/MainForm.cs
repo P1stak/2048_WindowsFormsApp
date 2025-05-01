@@ -144,6 +144,7 @@ namespace _2048_WindowsFormsApp
             {
                 for (int j = 0; j < mapSize; j++)
                 {
+                    UpdateLabelsColor(_labelsMap[i, j]);
                     if (_labelsMap[i, j].Text == string.Empty)
                     {
                         emptyCells.Add((i, j));
@@ -170,6 +171,7 @@ namespace _2048_WindowsFormsApp
             // 4. Генерируем 2 (75%) или 4 (25%)
             int newValue = _random.Next(100) < 75 ? 2 : 4;
             _labelsMap[row, col].Text = newValue.ToString();
+            UpdateLabelsColor(_labelsMap[row, col]);
         }
         private bool IsGameOver()
         {
@@ -200,6 +202,34 @@ namespace _2048_WindowsFormsApp
             }
 
             return true; // Нет ходов — игра окончена
+        }
+        private void UpdateLabelsColor(Label label)
+        {
+            if (string.IsNullOrEmpty(label.Text))
+            {
+                label.BackColor = Color.Beige;
+                label.ForeColor = Color.Black;
+                return;
+            }
+            int value = int.Parse(label.Text);
+
+            // меняю цвета на чуть более темный цвет в зависимости от значения ячейки
+            switch (value)
+            {
+                case 2: label.BackColor = Color.Beige; break;
+                case 4: label.BackColor = Color.Bisque; break;
+                case 8: label.BackColor = Color.SandyBrown; break;
+                case 16: label.BackColor = Color.Orange; break;
+                case 32: label.BackColor = Color.DarkOrange; break;
+                case 64: label.BackColor = Color.OrangeRed; break;
+                case 128: label.BackColor = Color.LightSalmon; break;
+                case 256: label.BackColor = Color.Salmon; break;
+                case 512: label.BackColor = Color.IndianRed; break;
+                case 1024: label.BackColor = Color.Firebrick; break;
+                case 2048: label.BackColor = Color.Maroon; break;
+                default: label.BackColor = Color.Black; break;
+            }
+            label.ForeColor = value <= 4 ? Color.Black : Color.White;
         }
 
         private Label CreateLabel(int indexRow, int indexColum) // параметры для того, чтобы сместить новый лейбл от предыдущего и его нумерация
@@ -244,6 +274,7 @@ namespace _2048_WindowsFormsApp
                                         var number = int.Parse(_labelsMap[i, j].Text); // берем то что там написано
                                         UpdateScore(number * 2); // плюсуем в результат
                                         _labelsMap[i,j].Text = (number * 2).ToString(); // и мы их складываем
+                                        UpdateLabelsColor(_labelsMap[i, j]);
 
                                         //а ячейка _labelsMap[i, k].Text (которую )обнуляем
                                         _labelsMap[i, k].Text = string.Empty;
@@ -274,7 +305,9 @@ namespace _2048_WindowsFormsApp
                                 {
                                     // то просто перезаписываем их
                                     _labelsMap[i, j].Text = _labelsMap[i, k].Text;
+                                    UpdateLabelsColor(_labelsMap[i, j]);
                                     _labelsMap[i, k].Text = string.Empty;
+                                    UpdateLabelsColor(_labelsMap[i, j]);
                                     break;
                                 }
 
@@ -309,6 +342,7 @@ namespace _2048_WindowsFormsApp
                                         var number = int.Parse(_labelsMap[i, j].Text); // берем то что там написано
                                         UpdateScore(number * 2);
                                         _labelsMap[i, j].Text = (number * 2).ToString(); // и мы их складываем
+                                        UpdateLabelsColor(_labelsMap[i, j]);
 
                                         //а ячейка _labelsMap[i, k].Text (которую )обнуляем
                                         _labelsMap[i, k].Text = string.Empty;
@@ -339,7 +373,9 @@ namespace _2048_WindowsFormsApp
                                 {
                                     // то просто перезаписываем их
                                     _labelsMap[i, j].Text = _labelsMap[i, k].Text;
+                                    UpdateLabelsColor(_labelsMap[i, j]);
                                     _labelsMap[i, k].Text = string.Empty;
+                                    UpdateLabelsColor(_labelsMap[i, j]);
                                     break;
                                 }
 
@@ -374,6 +410,7 @@ namespace _2048_WindowsFormsApp
                                         var number = int.Parse(_labelsMap[i, j].Text); // берем то что там написано
                                         UpdateScore(number * 2);
                                         _labelsMap[i, j].Text = (number * 2).ToString(); // и мы их складываем
+                                        UpdateLabelsColor(_labelsMap[i, j]);
 
                                         //а ячейка _labelsMap[i, k].Text (которую )обнуляем
                                         _labelsMap[k, j].Text = string.Empty;
@@ -404,7 +441,9 @@ namespace _2048_WindowsFormsApp
                                 {
                                     // то просто перезаписываем их
                                     _labelsMap[i, j].Text = _labelsMap[k, j].Text;
+                                    UpdateLabelsColor(_labelsMap[i, j]);
                                     _labelsMap[k, j].Text = string.Empty;
+                                    UpdateLabelsColor(_labelsMap[i, j]);
                                     break;
                                 }
 
@@ -439,6 +478,7 @@ namespace _2048_WindowsFormsApp
                                         var number = int.Parse(_labelsMap[i, j].Text); // берем то что там написано
                                         UpdateScore(number * 2);
                                         _labelsMap[i, j].Text = (number * 2).ToString(); // и мы их складываем
+                                        UpdateLabelsColor(_labelsMap[i, j]);
 
                                         //а ячейка _labelsMap[i, k].Text (которую )обнуляем
                                         _labelsMap[k, j].Text = string.Empty;
@@ -469,7 +509,9 @@ namespace _2048_WindowsFormsApp
                                 {
                                     // то просто перезаписываем их
                                     _labelsMap[i, j].Text = _labelsMap[k, j].Text;
+                                    UpdateLabelsColor(_labelsMap[i, j]);
                                     _labelsMap[k, j].Text = string.Empty;
+                                    UpdateLabelsColor(_labelsMap[i, j]);
                                     break;
                                 }
 
