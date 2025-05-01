@@ -35,9 +35,13 @@
             this.menu_button_Restart = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_button_Rules = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_button_Results = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_button_Field_Size = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_button_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.BestScoreLabel = new System.Windows.Forms.Label();
             this.bestScoreL = new System.Windows.Forms.Label();
+            this.textBox_field_size = new System.Windows.Forms.TextBox();
+            this.button_field_size = new System.Windows.Forms.Button();
+            this.label_field_size = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -75,6 +79,7 @@
             this.menu_button_Restart,
             this.menu_button_Rules,
             this.menu_button_Results,
+            this.menu_button_Field_Size,
             this.menu_button_Exit});
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(53, 20);
@@ -83,28 +88,35 @@
             // menu_button_Restart
             // 
             this.menu_button_Restart.Name = "menu_button_Restart";
-            this.menu_button_Restart.Size = new System.Drawing.Size(154, 22);
+            this.menu_button_Restart.Size = new System.Drawing.Size(180, 22);
             this.menu_button_Restart.Text = "Перезагрузить";
             this.menu_button_Restart.Click += new System.EventHandler(this.menu_button_Restart_Click);
             // 
             // menu_button_Rules
             // 
             this.menu_button_Rules.Name = "menu_button_Rules";
-            this.menu_button_Rules.Size = new System.Drawing.Size(154, 22);
+            this.menu_button_Rules.Size = new System.Drawing.Size(180, 22);
             this.menu_button_Rules.Text = "Правила";
             this.menu_button_Rules.Click += new System.EventHandler(this.menu_button_Rules_Click);
             // 
             // menu_button_Results
             // 
             this.menu_button_Results.Name = "menu_button_Results";
-            this.menu_button_Results.Size = new System.Drawing.Size(154, 22);
+            this.menu_button_Results.Size = new System.Drawing.Size(180, 22);
             this.menu_button_Results.Text = "Результаты";
             this.menu_button_Results.Click += new System.EventHandler(this.menu_button_Results_Click);
+            // 
+            // menu_button_Field_Size
+            // 
+            this.menu_button_Field_Size.Name = "menu_button_Field_Size";
+            this.menu_button_Field_Size.Size = new System.Drawing.Size(180, 22);
+            this.menu_button_Field_Size.Text = "Размер поля";
+            this.menu_button_Field_Size.Click += new System.EventHandler(this.menu_button_Field_Size_Click);
             // 
             // menu_button_Exit
             // 
             this.menu_button_Exit.Name = "menu_button_Exit";
-            this.menu_button_Exit.Size = new System.Drawing.Size(154, 22);
+            this.menu_button_Exit.Size = new System.Drawing.Size(180, 22);
             this.menu_button_Exit.Text = "Выход";
             this.menu_button_Exit.Click += new System.EventHandler(this.menu_button_Exit_Click);
             // 
@@ -126,11 +138,40 @@
             this.bestScoreL.TabIndex = 5;
             this.bestScoreL.Text = "Лучший результат:";
             // 
+            // textBox_field_size
+            // 
+            this.textBox_field_size.Location = new System.Drawing.Point(88, 31);
+            this.textBox_field_size.Name = "textBox_field_size";
+            this.textBox_field_size.Size = new System.Drawing.Size(100, 20);
+            this.textBox_field_size.TabIndex = 6;
+            // 
+            // button_field_size
+            // 
+            this.button_field_size.Location = new System.Drawing.Point(202, 29);
+            this.button_field_size.Name = "button_field_size";
+            this.button_field_size.Size = new System.Drawing.Size(75, 23);
+            this.button_field_size.TabIndex = 7;
+            this.button_field_size.Text = "OK";
+            this.button_field_size.UseVisualStyleBackColor = true;
+            this.button_field_size.Click += new System.EventHandler(this.button_field_size_Click);
+            // 
+            // label_field_size
+            // 
+            this.label_field_size.AutoSize = true;
+            this.label_field_size.Location = new System.Drawing.Point(85, 7);
+            this.label_field_size.Name = "label_field_size";
+            this.label_field_size.Size = new System.Drawing.Size(223, 13);
+            this.label_field_size.TabIndex = 9;
+            this.label_field_size.Text = "Укажите размерность поля одной цифрой";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(319, 382);
+            this.Controls.Add(this.label_field_size);
+            this.Controls.Add(this.button_field_size);
+            this.Controls.Add(this.textBox_field_size);
             this.Controls.Add(this.bestScoreL);
             this.Controls.Add(this.BestScoreLabel);
             this.Controls.Add(this.scoreLabel);
@@ -161,6 +202,10 @@
         private System.Windows.Forms.Label BestScore;
         private System.Windows.Forms.Label BestScoreLabel;
         private System.Windows.Forms.Label bestScoreL;
+        private System.Windows.Forms.ToolStripMenuItem menu_button_Field_Size;
+        private System.Windows.Forms.TextBox textBox_field_size;
+        private System.Windows.Forms.Button button_field_size;
+        private System.Windows.Forms.Label label_field_size;
     }
 }
 
