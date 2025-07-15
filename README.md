@@ -35,11 +35,15 @@ cd 2048_WindowsFormsApp
 <table>
   <tr>
     <th>Главное окно</th>
+    <th>Поле 4х4 (Стандарное)</th>
+    <th>Поле 10х10</th>
     <th>Таблица результатов</th>
   </tr>
   <tr>
-    <td><img src="docs/screenshot_main.png" alt="Main" width="300"></td>
-    <td><img src="docs/screenshot_results.png" alt="Results" width="300"></td>
+    <td><img width="373" height="445" alt="image" src="https://github.com/user-attachments/assets/8ae0ef68-2bdc-462e-8a16-22b87481f32d" /></td>
+    <td><img width="319" height="429" alt="image" src="https://github.com/user-attachments/assets/bf5576a5-5646-45e9-b8fe-8cfe340bc112" /></td>
+    <td><img width="778" height="886" alt="image" src="https://github.com/user-attachments/assets/cc1e550a-a22b-4b75-845c-31fedb074e1b" /></td>
+    <td><img width="297" height="475" alt="image" src="https://github.com/user-attachments/assets/1fdb66e0-fded-4e84-b33b-c6f80b0c69dd" /></td>
   </tr>
 </table>
 
@@ -66,10 +70,3 @@ cd 2048_WindowsFormsApp
 <h2>📊 Сохранение результатов</h2>
 <p>Результаты хранятся в файле <code>usersResults.json</code> рядом с exe.<br>
 Файл создаётся автоматически при первом запуске.</p>
-
-<h2>🤝 Участие</h2>
-<p>Пулл-реквесты и issue приветствуются!<br>
-Если нашли баг или есть идея — смело пишите.</p>
-
-<h2>📄 Лицензия</h2>
-<p>Проект распространяется под <a href="LICENSE">MIT License</a>.</p>
