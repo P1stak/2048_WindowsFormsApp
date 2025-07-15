@@ -20,13 +20,12 @@
   <li>.NET Framework 4.8 (есть в современных ОС)</li>
 </ul>
 <ol>
-  <li>Скачайте последний релиз из раздела <a href="../../releases">Releases</a></li>
   <li>Распакуйте архив и запустите <code>2048_WindowsFormsApp.exe</code></li>
   <li>Введите своё имя — и играйте!</li>
 </ol>
 
 <h2>🛠 Сборка из исходников</h2>
-<pre><code>git clone https://github.com/YOUR_USERNAME/2048_WindowsFormsApp.git
+<pre><code>git clone https://github.com/P1stak/2048_WindowsFormsApp.git
 cd 2048_WindowsFormsApp
 # Откройте 2048_WindowsFormsApp.sln в Visual Studio
 # Соберите (F6) и запустите (F5)</code></pre>
